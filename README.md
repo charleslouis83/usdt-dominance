@@ -17,10 +17,11 @@ python3 usdt_dominance.py [coin_id]
 `coin_id` defaults to `bitcoin` if not provided. Use a CoinGecko coin ID
 (e.g. `ethereum`, `solana`, etc.).
 
-The only required package is `requests`. Install it with:
+The project depends only on the `requests` package. Install it using the
+provided requirements file:
 
 ```
-pip install requests
+pip install -r requirements.txt
 ```
 
 The helper function `fetch_market_chart` gracefully handles network errors. If
