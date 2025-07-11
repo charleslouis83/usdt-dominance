@@ -17,8 +17,8 @@ python3 usdt_dominance.py [coin_id]
 `coin_id` defaults to `bitcoin` if not provided. Use a CoinGecko coin ID
 (e.g. `ethereum`, `solana`, etc.).
 
-Ensure `requests` is installed:
+Install dependencies with:
 
 ```
-pip install requests
+pip install -r requirements.txt
 ```
