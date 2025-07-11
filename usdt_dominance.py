@@ -5,15 +5,28 @@ COINGECKO_BASE = "https://api.coingecko.com/api/v3"
 
 
 def get_usdt_dominance() -> float:
-    """Fetch current USDT market cap percentage from CoinGecko."""
-    resp = requests.get(f"{COINGECKO_BASE}/global")
-    resp.raise_for_status()
+    """Fetch current USDT market cap percentage from CoinGecko.
+
+    On network failure the function prints an error and returns ``0.0`` so
+    callers don't have to handle exceptions.
+    """
+    try:
+        resp = requests.get(f"{COINGECKO_BASE}/global")
+        resp.raise_for_status()
+    except requests.RequestException as exc:
+        print(f"Failed to fetch USDT dominance: {exc}")
+        return 0.0
+
     data = resp.json()
     return data["data"]["market_cap_percentage"].get("usdt", 0.0)
 
 
 def get_top_coins_market_data(limit: int = 300):
-    """Return market data for top `limit` coins sorted by market cap."""
+    """Return market data for top ``limit`` coins sorted by market cap.
+
+    If any request fails, the function logs the error and returns an empty
+    list.
+    """
     per_page = 250
     coins = []
     for page in range(1, (limit - 1) // per_page + 2):
@@ -22,8 +35,12 @@ def get_top_coins_market_data(limit: int = 300):
             f"{COINGECKO_BASE}/coins/markets?vs_currency=usd&order=market_cap_desc"
             f"&per_page={page_limit}&page={page}"
         )
-        resp = requests.get(url)
-        resp.raise_for_status()
+        try:
+            resp = requests.get(url)
+            resp.raise_for_status()
+        except requests.RequestException as exc:
+            print(f"Failed to fetch market data page {page}: {exc}")
+            return []
         coins.extend(resp.json())
     return coins[:limit]
 
