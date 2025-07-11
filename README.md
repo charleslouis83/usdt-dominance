@@ -22,3 +22,7 @@ The only required package is `requests`. Install it with:
 ```
 pip install requests
 ```
+
+The helper function `fetch_market_chart` gracefully handles network errors. If
+the request fails, it prints an error message and returns empty lists so the
+rest of the analysis can continue (yielding zero correlations).
