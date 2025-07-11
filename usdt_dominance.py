@@ -28,6 +28,24 @@ def get_top_coins_market_data(limit: int = 300):
     return coins[:limit]
 
 
+def fetch_market_chart(coin_id: str, days: int = 30):
+    """Fetch historical market chart data for a coin.
+
+    On network failure the function prints an error and returns two empty
+    lists so any correlation calculations can safely proceed with zero data.
+    """
+    url = f"{COINGECKO_BASE}/coins/{coin_id}/market_chart?vs_currency=usd&days={days}"
+    try:
+        resp = requests.get(url)
+        resp.raise_for_status()
+    except requests.RequestException as exc:
+        print(f"Failed to fetch market chart for {coin_id}: {exc}")
+        return [], []
+
+    data = resp.json()
+    return data.get("prices", []), data.get("market_caps", [])
+
+
 def average_change_24h(coins) -> float:
     """Compute average 24h price change percentage for given coins."""
     return mean(c.get("price_change_percentage_24h", 0.0) for c in coins)
