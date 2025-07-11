@@ -1,24 +1,29 @@
 # aibot
 
-This repository contains a small script `usdt_dominance.py` that fetches
-USDT dominance and market data for the top 300 cryptocurrencies using the
-CoinGecko public API.
+This repository contains a Python script `usdt_dominance.py` that fetches
+historical market data from the CoinGecko API and computes how strongly a coin
+is correlated with USDT dominance. The script approximates USDT dominance using
+market caps of USDT, Bitcoin and Ethereum, and prints signals for multiple
+timeframes.
 
-## Usage
+Run the script with Python 3. It prints correlation statistics for the coin in
+four timeframes:
 
-Run the script with Python 3. It will output the current USDT dominance,
-the average 24h change across the top 300 coins, the 24h change for a
-specific coin, and a simple market signal (bullish, bearish, or neutral).
+* **15m** and **2h** – computed from 5-minute data over the last two days.
+* **1d** and **1w** – computed from daily data over the last month.
 
+For each timeframe you will see the correlation, a confidence score (absolute
+value of the correlation), and whether the setup suggests a *long* or *short*
+bias. The entry and exit price correspond to the first and last prices used in
+that timeframe.
 ```
 python3 usdt_dominance.py [coin_id]
 ```
 
 `coin_id` defaults to `bitcoin` if not provided. Use a CoinGecko coin ID
-(e.g. `ethereum`, `solana`, etc.).
 
-Ensure `requests` is installed:
+Install dependencies (requests and numpy) if they are not already available:
+```
+pip install requests numpy
+```
 
-```
-pip install requests
-```
