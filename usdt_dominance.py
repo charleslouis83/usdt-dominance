@@ -1,5 +1,5 @@
 import requests
-from statistics import mean
+from statistics import mean, correlation, StatisticsError
 
 COINGECKO_BASE = "https://api.coingecko.com/api/v3"
 
@@ -39,6 +39,20 @@ def coin_change(coins, coin_id: str) -> float:
         if coin.get("id") == coin_id:
             return coin.get("price_change_percentage_24h", 0.0)
     return 0.0
+
+
+def correlation_for_timeframe(series_a, series_b):
+    """Return the correlation between two numeric series.
+
+    If the correlation cannot be calculated because one of the series is
+    constant (zero variance) or has insufficient data, ``0.0`` is returned
+    instead of raising ``StatisticsError``.
+    """
+
+    try:
+        return correlation(series_a, series_b)
+    except StatisticsError:
+        return 0.0
 
 
 def risk_signal(usdt_dom: float, avg_change: float) -> str:
