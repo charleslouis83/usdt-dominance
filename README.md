@@ -1,4 +1,4 @@
-# aibot
+# USDT-dominance
 
 This repository contains a small script `usdt_dominance.py` that fetches
 USDT dominance and market data for the top 300 cryptocurrencies using the
